@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:oauth="http://www.springframework.org/schema/security/oauth2"
+       xsi:schemaLocation="http://www.springframework.org/schema/security/oauth2 
+       					   http://www.springframework.org/schema/security/spring-security-oauth2-2.0.xsd
+       					   http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/security
+                           http://www.springframework.org/schema/security/spring-security-3.2.xsd
+                           http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+						   http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd ">
+
+ 
+ <!--<security:http pattern="/index/*" security="none" />-->
+ 
+<security:http auto-config="true" >
+  <security:intercept-url pattern="/index*" access="ROLE_USER,ROLE_ADMIN" />
+  <security:intercept-url pattern="/index/**" access="ROLE_USER,ROLE_ADMIN" />
+  <security:form-login login-page="/login" default-target-url="/index"
+   authentication-failure-url="/fail2login"/>
+  <security:logout logout-success-url="/logout" />
+  <security:remember-me key="Secret"/>
+ </security:http>
+ 
+ <!--<security:http  pattern="/api/**" entry-point-ref="restAuthenticationEntryPoint" use-expressions="true" auto-config="false" create-session="stateless" >
+    <security:intercept-url pattern="/api/token" access="permitAll" />
+    <security:custom-filter ref="authenticationTokenProcessingFilter" position="FORM_LOGIN_FILTER"   />
+    <security:intercept-url pattern="/api/**" access="isAuthenticated()" />
+     
+ 
+    <security:logout logout-success-url="/logout"/>
+</security:http>
+ 
+<bean class="com.pravin.TokenBased_Auth.CustomTokenAuthenticationFilter"
+    id="authenticationTokenProcessingFilter">
+    <constructor-arg type="java.lang.String"><value>/api/**</value></constructor-arg>
+</bean>-->
+ 
+ 
+ <bean id="encoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" >
+            <constructor-arg name="strength" value="12"/>
+    </bean>
+    
+    
+ <security:authentication-manager>
+   <security:authentication-provider>
+   	<security:password-encoder ref="encoder"/>  
+      
+      <!--<security:user-service>
+   <security:user name="pravin" password="pravin129" authorities="ROLE_USER" />
+     </security:user-service>-->
+     <security:jdbc-user-service data-source-ref="dataSource"  
+      users-by-username-query="select username, password, active from users where username=?" 
+          authorities-by-username-query="select us.username, ur.authority from users us, user_roles ur 
+        where us.user_id = ur.user_id and us.username =?"/>
+        
+   </security:authentication-provider>
+ </security:authentication-manager>
+ 
+ </beans>

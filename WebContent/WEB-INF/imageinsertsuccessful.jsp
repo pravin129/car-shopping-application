@@ -1,0 +1,1 @@
+<h1>your image has been successfully inserted</h1>
