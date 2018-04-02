@@ -473,7 +473,7 @@ public class LoginController  {
 	    @RequestMapping(value ="/frontpage", method = RequestMethod.GET)
 		public ModelAndView multipalaction(HttpServletRequest req)throws Exception {
 		ModelAndView mav=new ModelAndView();
-	        
+	        System.out.println("inside front page");
 	        String action=req.getParameter("action");
 	        System.out.println(action);
 	        if(action.equalsIgnoreCase("register"))
