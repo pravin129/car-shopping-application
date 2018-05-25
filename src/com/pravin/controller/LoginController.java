@@ -475,7 +475,7 @@ public class LoginController  {
 		ModelAndView mav=new ModelAndView();
 	        System.out.println("inside front page");
 	        String action=req.getParameter("action");
-	        System.out.println(action);
+	        System.out.println("log1"+action);
 	        if(action.equalsIgnoreCase("register"))
 	        {
 	        	mav=new ModelAndView("Registrationform");
